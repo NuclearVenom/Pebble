@@ -10,12 +10,12 @@ Press <kbd>Alt</kbd>+<kbd>Space</kbd> anywhere, ask anything, get a streamed ans
 <table>
   <tr>
     <td align="center">
-      <a href="https://raw.githubusercontent.com/NuclearVenom/Pebble/main/Pebble_1.0.0_x64-setup.exe">
+      <a href="https://github.com/NuclearVenom/Pebble/releases/download/v1.0.0/Pebble_1.0.0_x64-setup.exe">
         <img src="https://img.shields.io/badge/Download_EXE_(Recommended)-229944?style=for-the-badge&logo=windows&logoColor=white" alt="Download EXE">
       </a>
     </td>
     <td align="center">
-      <a href="https://raw.githubusercontent.com/NuclearVenom/Pebble/main/Pebble_1.0.0_x64_en-US.msi">
+      <a href="https://github.com/NuclearVenom/Pebble/releases/download/v1.0.0/Pebble_1.0.0_x64_en-US.msi">
         <img src="https://img.shields.io/badge/Download_MSI_Installer-557755?style=for-the-badge&logo=windows&logoColor=white" alt="Download MSI">
       </a>
     </td>
