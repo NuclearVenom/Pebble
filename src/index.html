@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="color-scheme" content="dark" />
+  <title>Pebble</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div id="app">
+
+    <!-- Update notification bar — shown above the capsule when a new version
+         is available. Hidden by default; shown by updater.js. -->
+    <div id="update-bar" class="hidden" aria-live="polite">
+      <div class="update-bar-left">
+        <svg class="update-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M8 2v8M5 7l3 3 3-3"/>
+          <path d="M3 13h10" stroke-linecap="round"/>
+        </svg>
+        <span id="update-msg">New update available — Pebble v…</span>
+      </div>
+      <div class="update-bar-right">
+        <button class="update-btn" id="update-btn" type="button">Update now</button>
+        <button class="update-dismiss" id="update-dismiss" type="button" title="Dismiss">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 4l8 8M12 4l-8 8"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- The capsule is one continuous shape that grows downward to become
+         the dashboard when the logo is clicked — not a separate panel next
+         to the search bar. The search input and the "Pebble" title occupy
+         the same slot in #capsule-row and crossfade between each other, so
+         opening the dashboard replaces the search bar rather than just
+         adding content below it; #dashboard itself is collapsed to zero
+         height until opened. -->
+    <div id="capsule">
+      <div id="capsule-row">
+        <img id="logo" src="logo.png" alt="" draggable="false" style="margin-left: -12px;" />
+        <div id="row-center">
+          <input id="input" type="text" placeholder="Ask Pebble…" autocomplete="on" autocorrect="off" spellcheck="on"
+            style="margin-left: -12px;" />
+          <span id="capsule-title" aria-hidden="true">Pebble</span>
+        </div>
+        <div id="dots" class="hidden" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div id="dashboard">
+        <div class="info-gradient"></div>
+        <div id="dashboard-content">
+          <div class="dash-header">
+            <div class="dash-header-left">
+              <div class="dash-credit">Developed by Ranasurya Ghosh</div>
+              <div class="dash-status-row">
+                <span class="status-dot checking" id="dash-status-dot"></span>
+                <span id="dash-status-text">Checking…</span>
+              </div>
+            </div>
+            <div class="dash-header-right">
+              <button class="dash-github-btn" id="dash-github-btn" type="button">
+                <svg viewBox="0 0 16 16" fill="currentColor">
+                  <path
+                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+                </svg>
+                <span>GitHub</span>
+              </button>
+              <button class="dash-check-update-btn" id="dash-check-update-btn" type="button">
+                <svg class="dash-check-update-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M8 3v5l3 2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="8" cy="8" r="6"/>
+                </svg>
+                <span id="dash-check-update-label">Check for update</span>
+              </button>
+            </div>
+          </div>
+
+          <button class="dash-keys-toggle" id="dash-keys-toggle" type="button">
+            <span id="dash-keys-summary">Checking API keys…</span>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M4 6l4 4 4-4" />
+            </svg>
+          </button>
+          <div class="dash-keys-list" id="dash-keys-list"></div>
+
+          <!-- auto-save toggle row -->
+          <div class="dash-auto-save-row">
+            <span class="dash-auto-save-label">Auto save chats</span>
+            <button class="pill-toggle" id="dash-auto-save-toggle" type="button" aria-pressed="false" title="Toggle auto-save for all chats">
+              <span class="pill-thumb"></span>
+            </button>
+          </div>
+
+          <!-- saved chats collapsible -->
+          <button class="dash-section-toggle" id="dash-chats-toggle" type="button">
+            <svg class="dash-section-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+              <path d="M2 2.5h12a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H5.5L2 13V3a.5.5 0 0 1 .5-.5z"/>
+            </svg>
+            <span id="dash-chats-summary">Saved Chats</span>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M4 6l4 4 4-4" />
+            </svg>
+          </button>
+          <div class="dash-section-list" id="dash-chats-list"></div>
+
+        </div>
+      </div>
+    </div>
+
+    <div id="panel">
+      <div id="panel-actions-wrapper">
+        <button class="panel-action-btn" id="more-options-btn" type="button" title="More options">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <circle cx="3.5" cy="8" r="1.5" />
+            <circle cx="8" cy="8" r="1.5" />
+            <circle cx="12.5" cy="8" r="1.5" />
+          </svg>
+        </button>
+        <div id="panel-actions">
+        <!-- copy whole response -->
+        <button class="panel-action-btn copy-btn copy-all" id="copy-all-btn" type="button" title="Copy response">
+          <svg class="icon-copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+            <rect x="5.5" y="5.5" width="8" height="9" rx="1.5" />
+            <path d="M3.5 10.5V3a1.5 1.5 0 0 1 1.5-1.5h6.5" />
+          </svg>
+          <svg class="icon-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M3 8.5l3 3 7-7" />
+          </svg>
+        </button>
+        <!-- save conversation (dummy) -->
+        <button class="panel-action-btn" id="save-btn" type="button" title="Save conversation">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+            <path d="M3 2h7.5L13 4.5V14H3V2z" />
+            <path d="M5.5 2v3.5h5V2" />
+            <rect x="4.5" y="9" width="7" height="4" rx="0.5" />
+          </svg>
+        </button>
+        <!-- regenerate with web search -->
+        <button class="panel-action-btn" id="force-search-btn" type="button" title="Regenerate with web search">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+            <circle cx="8" cy="8" r="6" />
+            <ellipse cx="8" cy="8" rx="3" ry="6" />
+            <path d="M2 8h12" />
+          </svg>
+        </button>
+        <!-- continue conversation / chat mode -->
+        <button class="panel-action-btn" id="chat-btn" type="button" title="Continue conversation">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+            <path d="M2 2.5h12a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H5.5L2 13V3a.5.5 0 0 1 .5-.5z" />
+          </svg>
+        </button>
+        </div>
+      </div>
+      <div id="scroll-area">
+        <div id="output"></div>
+      </div>
+      <div id="panel-footer" class="hidden">
+        <span id="chat-save-status"></span>
+        <span id="token-counter">~0 tokens</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/mhchem.min.js"></script>
+  <script type="module" src="main.js"></script>
+</body>
+
+</html>

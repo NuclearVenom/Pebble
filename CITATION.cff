@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use Pebble in published work, please cite it using the metadata below."
+type: software
+title: "Pebble: A Lightweight Always-On-Top AI Desktop Overlay"
+version: 1.0.0
+date-released: "2026-08-16"
+authors:
+  - family-names: Ghosh
+    given-names: Ranasurya
+repository-code: https://github.com/NuclearVenom/Pebble
+url: https://github.com/NuclearVenom/Pebble
+license: MIT
+abstract: >
+  Pebble is a minimal, always-on-top desktop AI overlay built with Tauri and
+  plain HTML/CSS/JS. It surfaces a Groq-powered AI assistant as a transparent
+  floating capsule, activated globally with Alt+Space. Pebble supports streamed
+  responses, rich content rendering (math, chemistry, diagrams, plots, maps,
+  3D structures, and more), multi-turn chat mode, persistent chat history,
+  web search, and automatic in-app updates.
+keywords:
+  - AI
+  - desktop overlay
+  - Tauri
+  - Groq
+  - assistant
+  - always-on-top
+  - Rust

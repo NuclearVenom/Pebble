@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Pebble",
+  "version": "1.0.0",
+  "identifier": "com.pebble.overlay",
+  "build": {
+    "frontendDist": "../src"
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Pebble",
+        "url": "index.html",
+        "width": 560,
+        "height": 58,
+        "minWidth": 560,
+        "minHeight": 58,
+        "resizable": false,
+        "maximizable": false,
+        "minimizable": false,
+        "decorations": false,
+        "transparent": true,
+        "backgroundColor": "#0f0f11",
+        "shadow": false,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "visible": false,
+        "focus": false,
+        "center": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXkKUldTVFBMQUNFSE9MREVSUkVQTEFDRVdJVEhSRUFMS0VZR0VORVJBVEVEV0lUSFRBVVJJU0lHTkVSCg==",
+      "endpoints": [
+        "https://github.com/NuclearVenom/Pebble/releases/latest/download/latest.json"
+      ]
+    }
+  }
+}
