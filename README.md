@@ -27,7 +27,8 @@ Press <kbd>Alt</kbd>+<kbd>Space</kbd> anywhere, ask anything, get a streamed ans
 
 >**Note:** Windows may display a security warning because this experimental beta is not currently digitally signed. Only install Pebble builds obtained directly from this repository.
 
-<a href="https://github.com/NuclearVenom/Pebble/releases/latest"><img alt="Latest Release" src="https://img.shields.io/github/v/release/NuclearVenom/Pebble&label=release&color=6c8ebf" /></a>
+<a href="https://github.com/NuclearVenom/Pebble/releases/latest">
+  <img alt="Latest Release" src="https://img.shields.io/github/v/release/NuclearVenom/Pebble?label=release&color=A47FFC" /></a>
 <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-darkgreen" /></a>
 <a href="https://github.com/NuclearVenom/Pebble/issues"><img alt="Issues" src="https://img.shields.io/github/issues/NuclearVenom/Pebble?&color=6c8ebf" /></a>
 
