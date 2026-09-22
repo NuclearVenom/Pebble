@@ -522,7 +522,7 @@ If you use Pebble in published work, you can cite it as:
   author  = {Ghosh, Ranasurya},
   title   = {Pebble: A Lightweight Always-On-Top AI Desktop Overlay},
   year    = {2026},
-  version = {1.0.0},
+  version = {1.1.0},
   url     = {https://github.com/NuclearVenom/Pebble}
 }
 ```
