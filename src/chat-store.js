@@ -16,6 +16,8 @@
 
 const CHATS_KEY    = "pebble_chats";
 const AUTOSAVE_KEY = "pebble_auto_save";
+const ALWAYS_CHAT_KEY = "pebble_always_chat";
+const IGNORE_SINGLE_KEY = "pebble_ignore_single";
 const MAX_CHATS    = 50;
 
 // ---------- settings ----------
@@ -26,6 +28,22 @@ export function getAutoSave() {
 
 export function setAutoSave(enabled) {
   localStorage.setItem(AUTOSAVE_KEY, enabled ? "true" : "false");
+}
+
+export function getAlwaysChat() {
+  return localStorage.getItem(ALWAYS_CHAT_KEY) === "true";
+}
+
+export function setAlwaysChat(enabled) {
+  localStorage.setItem(ALWAYS_CHAT_KEY, enabled ? "true" : "false");
+}
+
+export function getIgnoreSingleQueries() {
+  return localStorage.getItem(IGNORE_SINGLE_KEY) === "true";
+}
+
+export function setIgnoreSingleQueries(enabled) {
+  localStorage.setItem(IGNORE_SINGLE_KEY, enabled ? "true" : "false");
 }
 
 // ---------- chat list ----------

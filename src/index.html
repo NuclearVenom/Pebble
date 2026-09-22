@@ -82,13 +82,21 @@
                 </svg>
                 <span>GitHub</span>
               </button>
-              <button class="dash-check-update-btn" id="dash-check-update-btn" type="button">
-                <svg class="dash-check-update-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M8 3v5l3 2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="8" cy="8" r="6"/>
-                </svg>
-                <span id="dash-check-update-label">Check for update</span>
-              </button>
+              <div style="display: flex; gap: 8px;">
+                <button class="dash-check-update-btn" id="dash-check-update-btn" type="button">
+                  <svg class="dash-check-update-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M8 3v5l3 2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="8" cy="8" r="6"/>
+                  </svg>
+                  <span id="dash-check-update-label">Check for update</span>
+                </button>
+                <button class="dash-quit-btn" id="dash-quit-btn" type="button" title="Quit Pebble">
+                  <svg class="dash-quit-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M8 8V2" stroke-linecap="round"/>
+                    <path d="M5 3.5a6 6 0 1 0 6 0" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -100,10 +108,26 @@
           </button>
           <div class="dash-keys-list" id="dash-keys-list"></div>
 
+          <!-- always chat mode toggle row -->
+          <div class="dash-auto-save-row">
+            <span class="dash-auto-save-label">Always Chat-mode</span>
+            <button class="pill-toggle" id="dash-always-chat-toggle" type="button" aria-pressed="false" title="Start every prompt in chat mode">
+              <span class="pill-thumb"></span>
+            </button>
+          </div>
+
           <!-- auto-save toggle row -->
           <div class="dash-auto-save-row">
             <span class="dash-auto-save-label">Auto save chats</span>
             <button class="pill-toggle" id="dash-auto-save-toggle" type="button" aria-pressed="false" title="Toggle auto-save for all chats">
+              <span class="pill-thumb"></span>
+            </button>
+          </div>
+
+          <!-- ignore single queries toggle row -->
+          <div class="dash-auto-save-row">
+            <span class="dash-auto-save-label">Ignore single queries</span>
+            <button class="pill-toggle" id="dash-ignore-single-toggle" type="button" aria-pressed="false" title="Only save conversations that are in chat mode">
               <span class="pill-thumb"></span>
             </button>
           </div>

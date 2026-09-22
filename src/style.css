@@ -659,6 +659,35 @@ body {
   color: var(--text);
 }
 
+.dash-quit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 6px;
+  border: 1px solid rgba(252, 90, 90, 0.35);
+  border-radius: 8px;
+  background: rgba(252, 90, 90, 0.07);
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 120ms ease, box-shadow 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+.dash-quit-btn:hover {
+  background: rgba(252, 90, 90, 0.16);
+  border-color: rgba(252, 90, 90, 0.6);
+  box-shadow: 0 0 0 1px rgba(252, 90, 90, 0.25);
+  color: var(--text);
+}
+
+.dash-quit-btn svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
 .dash-check-update-btn.checking {
   cursor: default;
   pointer-events: none;
@@ -1304,20 +1333,28 @@ body {
 
 
 
-#scroll-area::-webkit-scrollbar {
+#scroll-area::-webkit-scrollbar,
+.dash-section-list-inner::-webkit-scrollbar,
+.dash-keys-list-inner::-webkit-scrollbar {
   width: 6px;
 }
 
-#scroll-area::-webkit-scrollbar-track {
+#scroll-area::-webkit-scrollbar-track,
+.dash-section-list-inner::-webkit-scrollbar-track,
+.dash-keys-list-inner::-webkit-scrollbar-track {
   background: transparent;
 }
 
-#scroll-area::-webkit-scrollbar-thumb {
+#scroll-area::-webkit-scrollbar-thumb,
+.dash-section-list-inner::-webkit-scrollbar-thumb,
+.dash-keys-list-inner::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.55);
   border-radius: 3px;
 }
 
-#scroll-area::-webkit-scrollbar-thumb:hover {
+#scroll-area::-webkit-scrollbar-thumb:hover,
+.dash-section-list-inner::-webkit-scrollbar-thumb:hover,
+.dash-keys-list-inner::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.78);
 }
 

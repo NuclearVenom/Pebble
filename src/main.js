@@ -20,6 +20,8 @@ import {
 } from "./web-search.js";
 import {
   getAutoSave, setAutoSave,
+  getAlwaysChat, setAlwaysChat,
+  getIgnoreSingleQueries, setIgnoreSingleQueries,
   loadSavedChats, saveChat, deleteChat, deleteAllChats, relativeTime,
 } from "./chat-store.js";
 import { initUpdater, installUpdate, manualCheckForUpdate } from "./updater.js";
@@ -152,6 +154,8 @@ const dashKeysToggle = document.getElementById("dash-keys-toggle");
 const dashKeysSummary = document.getElementById("dash-keys-summary");
 const dashKeysList = document.getElementById("dash-keys-list");
 const dashAutoSaveToggle = document.getElementById("dash-auto-save-toggle");
+const dashAlwaysChatToggle = document.getElementById("dash-always-chat-toggle");
+const dashIgnoreSingleToggle = document.getElementById("dash-ignore-single-toggle");
 const dashChatsSummary  = document.getElementById("dash-chats-summary");
 const dashChatsToggle   = document.getElementById("dash-chats-toggle");
 const dashChatsList     = document.getElementById("dash-chats-list");
@@ -164,6 +168,11 @@ const updateDismissEl  = document.getElementById("update-dismiss");
 
 const dashCheckUpdateBtn   = document.getElementById("dash-check-update-btn");
 const dashCheckUpdateLabel = document.getElementById("dash-check-update-label");
+const dashQuitBtn          = document.getElementById("dash-quit-btn");
+
+dashQuitBtn.addEventListener("click", () => {
+  invoke("plugin:process|exit", { code: 0 });
+});
 
 deleteAllChatsDialog.addEventListener("close", () => {
   if (deleteAllChatsDialog.returnValue !== "confirm") return;
@@ -674,6 +683,8 @@ function updateSaveStatus() {
 function maybeSaveCurrentChat() {
   const shouldSave = saveChatEnabled;
   if (!shouldSave) return;
+  if (!chatMode && getIgnoreSingleQueries()) return;
+
   if (conversationHistory.length === 0) {
     // Single-shot mode — build a temp history from lastPrompt + fullText.
     if (!lastPrompt || !fullText) return;
@@ -686,20 +697,46 @@ function maybeSaveCurrentChat() {
   }
 }
 
-// ---------- auto-save pill toggle ----------
+// ---------- settings pill toggles ----------
 
 function applyAutoSaveUI() {
   const on = getAutoSave();
   dashAutoSaveToggle.setAttribute("aria-pressed", String(on));
 }
 
-// Initialise from stored preference.
+function applyAlwaysChatUI() {
+  const on = getAlwaysChat();
+  dashAlwaysChatToggle.setAttribute("aria-pressed", String(on));
+}
+
+function applyIgnoreSingleUI() {
+  const on = getIgnoreSingleQueries();
+  dashIgnoreSingleToggle.setAttribute("aria-pressed", String(on));
+}
+
+// Initialise from stored preferences.
 applyAutoSaveUI();
+applyAlwaysChatUI();
+applyIgnoreSingleUI();
 
 dashAutoSaveToggle.addEventListener("click", (e) => {
   e.stopPropagation();
   setAutoSave(!getAutoSave());
   applyAutoSaveUI();
+  growDashboardIfOpen();
+});
+
+dashAlwaysChatToggle.addEventListener("click", (e) => {
+  e.stopPropagation();
+  setAlwaysChat(!getAlwaysChat());
+  applyAlwaysChatUI();
+  growDashboardIfOpen();
+});
+
+dashIgnoreSingleToggle.addEventListener("click", (e) => {
+  e.stopPropagation();
+  setIgnoreSingleQueries(!getIgnoreSingleQueries());
+  applyIgnoreSingleUI();
   growDashboardIfOpen();
 });
 
@@ -1452,6 +1489,10 @@ async function askGroq(prompt) {
 
   const useSearch = needsWebSearch(prompt);
 
+  if (!chatMode && getAlwaysChat()) {
+    enterChatMode();
+  }
+
   if (chatMode) {
     if (useSearch) {
       await askGroqWithSearch(prompt, myController, isCurrent, /* isChat */ true);
@@ -1531,7 +1572,7 @@ async function askGroqWithSearch(prompt, myController, isCurrent, isChat, forceT
     assistantContainer = appendChatTurn(prompt);
     requestAnimationFrame(() => {
       const bubble = assistantContainer.previousElementSibling;
-      if (bubble) scrollAreaEl.scrollTop = bubble.offsetTop - 8;
+      if (bubble) scrollAreaEl.scrollTop = Math.max(0, bubble.offsetTop - (scrollAreaEl.clientHeight * 0.75));
     });
   }
 
@@ -1568,7 +1609,7 @@ async function askGroqWithSearch(prompt, myController, isCurrent, isChat, forceT
         renderOutput();
       }
       await resizePanel();
-      if (isChat) scrollAreaEl.scrollTop = scrollAreaEl.scrollHeight;
+      // Don't auto-scroll during streaming in chat mode — keep the user bubble in view.
     });
   }
 
@@ -1671,12 +1712,12 @@ async function askGroqChat(prompt, myController, isCurrent) {
   clearPromptInput();
   const assistantBlock = appendChatTurn(prompt);
 
-  // Scroll so the user bubble's top is visible (not the very bottom).
+  // Scroll so the follow-up prompt is kept 25% above the bottom edge of the response panel.
   // We read offsetTop after a rAF so the layout has settled.
   requestAnimationFrame(() => {
     const bubble = assistantBlock.previousElementSibling; // the .chat-user-bubble
     if (bubble) {
-      scrollAreaEl.scrollTop = bubble.offsetTop - 8; // 8px breathing room above the bubble
+      scrollAreaEl.scrollTop = Math.max(0, bubble.offsetTop - (scrollAreaEl.clientHeight * 0.75));
     }
   });
 

@@ -16,6 +16,12 @@ function ensureDomPurify() {
 
 const SANITIZE_CONFIG = {
   USE_PROFILES: { svg: true, svgFilters: true },
+  ADD_TAGS: ["animate", "animateMotion", "animateTransform", "set", "mpath"],
+  ADD_ATTR: [
+    "attributeName", "attributeType", "from", "to", "by", "begin", "dur", "end",
+    "min", "max", "restart", "repeatCount", "repeatDur", "fill", "calcMode",
+    "values", "keyTimes", "keySplines", "keyPoints", "path", "type", "additive", "accumulate"
+  ],
   // Explicitly forbidden regardless of profile defaults.
   FORBID_TAGS: ["script", "foreignObject", "iframe", "embed", "object", "use"],
   FORBID_ATTR: [
