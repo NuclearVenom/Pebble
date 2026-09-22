@@ -9,6 +9,7 @@
 //   loadSavedChats()         → SavedChat[]   (newest first)
 //   saveChat(messages)       → SavedChat
 //   deleteChat(id)           → void
+//   deleteAllChats()         → void
 //
 // SavedChat shape:
 //   { id, title, savedAt, messages: [{role,content},...] }
@@ -84,6 +85,10 @@ export function saveChat(messages) {
 export function deleteChat(id) {
   const chats = loadSavedChats().filter(c => c.id !== id);
   persistChats(chats);
+}
+
+export function deleteAllChats() {
+  persistChats([]);
 }
 
 // ---------- helpers ----------

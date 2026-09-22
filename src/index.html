@@ -51,6 +51,11 @@
         <div id="row-center">
           <input id="input" type="text" placeholder="Ask Pebble…" autocomplete="on" autocorrect="off" spellcheck="on"
             style="margin-left: -12px;" />
+          <button id="clear-input-btn" type="button" aria-label="Clear prompt" title="Clear prompt">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M4 4l8 8M12 4l-8 8" />
+            </svg>
+          </button>
           <span id="capsule-title" aria-hidden="true">Pebble</span>
         </div>
         <div id="dots" class="hidden" aria-hidden="true">
@@ -171,6 +176,17 @@
         <span id="token-counter">~0 tokens</span>
       </div>
     </div>
+
+    <dialog id="delete-all-chats-dialog" class="pebble-confirm-dialog" aria-labelledby="delete-all-chats-title">
+      <form method="dialog">
+        <h2 id="delete-all-chats-title">Delete all saved chats?</h2>
+        <p>This cannot be undone.</p>
+        <div class="pebble-confirm-actions">
+          <button class="pebble-confirm-cancel" value="cancel" type="submit">Cancel</button>
+          <button class="pebble-confirm-delete" value="confirm" type="submit">Delete all</button>
+        </div>
+      </form>
+    </dialog>
 
   </div>
 

@@ -223,6 +223,7 @@ body {
 
 #input {
   width: 100%;
+  padding-right: 30px;
   background: transparent;
   border: none;
   outline: none;
@@ -243,6 +244,47 @@ body {
 #input::placeholder {
   color: var(--text-dimmer);
   font-weight: 500;
+}
+
+#clear-input-btn {
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-dimmer);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.85);
+  transition: opacity 140ms ease, transform 140ms ease, background 120ms ease, color 120ms ease;
+}
+
+#clear-input-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+#clear-input-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+#clear-input-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+#capsule.dashboard-open #clear-input-btn {
+  opacity: 0;
+  pointer-events: none;
 }
 
 #capsule-title {
@@ -364,19 +406,29 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  padding: 10px 12px 30px 40px; /* large padding to catch mouse early */
+  padding: 6px 8px 10px 12px;
   z-index: 2;
   display: flex;
   justify-content: flex-end;
 }
 
 #more-options-btn {
-  opacity: 0.5;
-  transition: opacity 160ms ease, transform 160ms ease;
+  opacity: 0.75;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(20, 20, 24, 0.65);
+  /* box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); */
+  transition: opacity 160ms ease, transform 160ms ease, background 120ms ease, color 120ms ease;
 }
 
 #more-options-btn:hover {
   opacity: 1;
+  color: var(--text);
+  background: rgba(164, 127, 252, 0.18);
+}
+
+#more-options-btn svg {
+  width: 13px;
+  height: 13px;
 }
 
 #panel-actions {
@@ -835,6 +887,86 @@ body {
   padding: 4px 6px 8px;
 }
 
+.dash-chat-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 2px 6px 5px;
+}
+
+.dash-chats-delete-all {
+  padding: 4px 7px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dimmer);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.dash-chats-delete-all:hover {
+  background: rgba(232, 106, 74, 0.18);
+  color: #e86a4a;
+}
+
+/* ---------- in-app confirmation dialog ---------- */
+
+.pebble-confirm-dialog {
+  width: min(360px, calc(100% - 32px));
+  margin: auto;
+  padding: 18px;
+  border: 1px solid rgba(164, 127, 252, 0.3);
+  border-radius: 14px;
+  background: #1b1a20;
+  color: var(--text);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  font: inherit;
+}
+
+.pebble-confirm-dialog::backdrop {
+  background: rgba(5, 5, 7, 0.5);
+}
+
+.pebble-confirm-dialog h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.pebble-confirm-dialog p {
+  margin: 7px 0 18px;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.pebble-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.pebble-confirm-actions button {
+  padding: 7px 10px;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pebble-confirm-cancel {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: transparent;
+  color: var(--text);
+}
+
+.pebble-confirm-delete {
+  border: 1px solid #d75f43;
+  background: #d75f43;
+  color: #fff;
+}
+
 /* ---------- individual saved chat row ---------- */
 
 .dash-chat-item {
@@ -876,8 +1008,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   border: none;
   border-radius: 6px;
   background: transparent;
@@ -897,8 +1029,8 @@ body {
 }
 
 .dash-chat-delete svg {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
 }
 
 .dash-chat-empty {

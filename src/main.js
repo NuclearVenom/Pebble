@@ -20,7 +20,7 @@ import {
 } from "./web-search.js";
 import {
   getAutoSave, setAutoSave,
-  loadSavedChats, saveChat, deleteChat, relativeTime,
+  loadSavedChats, saveChat, deleteChat, deleteAllChats, relativeTime,
 } from "./chat-store.js";
 import { initUpdater, installUpdate, manualCheckForUpdate } from "./updater.js";
 
@@ -129,6 +129,7 @@ const SYSTEM_PROMPT = "You are Pebble, a lightweight always-on-top AI overlay " 
 
 const capsuleEl = document.getElementById("capsule");
 const inputEl = document.getElementById("input");
+const clearInputBtn = document.getElementById("clear-input-btn");
 const dotsEl = document.getElementById("dots");
 const logoEl = document.getElementById("logo");
 const panelEl = document.getElementById("panel");
@@ -154,6 +155,7 @@ const dashAutoSaveToggle = document.getElementById("dash-auto-save-toggle");
 const dashChatsSummary  = document.getElementById("dash-chats-summary");
 const dashChatsToggle   = document.getElementById("dash-chats-toggle");
 const dashChatsList     = document.getElementById("dash-chats-list");
+const deleteAllChatsDialog = document.getElementById("delete-all-chats-dialog");
 
 const updateBarEl      = document.getElementById("update-bar");
 const updateMsgEl      = document.getElementById("update-msg");
@@ -162,6 +164,13 @@ const updateDismissEl  = document.getElementById("update-dismiss");
 
 const dashCheckUpdateBtn   = document.getElementById("dash-check-update-btn");
 const dashCheckUpdateLabel = document.getElementById("dash-check-update-label");
+
+deleteAllChatsDialog.addEventListener("close", () => {
+  if (deleteAllChatsDialog.returnValue !== "confirm") return;
+  deleteAllChats();
+  renderSavedChats();
+  growDashboardIfOpen();
+});
 
 // ---------- state ----------
 
@@ -452,7 +461,7 @@ async function closeWidget() {
 
   if (abortController) abortController.abort();
   isStreaming = false;
-  inputEl.value = "";
+  clearPromptInput();
   fullText = "";
   lastPrompt = "";
   outputEl.innerHTML = "";
@@ -520,6 +529,25 @@ inputEl.addEventListener("blur", () => {
     }
   }, 100);
 });
+
+function updateClearInputButton() {
+  clearInputBtn.classList.toggle("visible", inputEl.value.length > 0);
+}
+
+function clearPromptInput() {
+  inputEl.value = "";
+  updateClearInputButton();
+}
+
+inputEl.addEventListener("input", updateClearInputButton);
+
+clearInputBtn.addEventListener("mousedown", (e) => e.preventDefault());
+clearInputBtn.addEventListener("click", () => {
+  clearPromptInput();
+  inputEl.focus();
+});
+
+updateClearInputButton();
 
 // ---------- panel actions hover ----------
 
@@ -692,6 +720,22 @@ function renderSavedChats() {
     empty.textContent = "No saved chats yet.";
     inner.appendChild(empty);
   } else {
+    const actions = document.createElement("div");
+    actions.className = "dash-chat-actions";
+
+    const deleteAllBtn = document.createElement("button");
+    deleteAllBtn.className = "dash-chats-delete-all";
+    deleteAllBtn.type = "button";
+    deleteAllBtn.textContent = "Delete all";
+    deleteAllBtn.title = "Delete all saved chats";
+    deleteAllBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      deleteAllChatsDialog.showModal();
+    });
+
+    actions.appendChild(deleteAllBtn);
+    inner.appendChild(actions);
+
     for (const chat of chats) {
       const row = document.createElement("div");
       row.className = "dash-chat-item";
@@ -779,7 +823,7 @@ async function restoreChat(savedChat) {
   panelFooterEl.classList.remove("hidden");
   panelEl.classList.add("chat-mode");
   inputEl.placeholder = "Ask a follow-up…";
-  inputEl.value = "";
+  clearPromptInput();
   saveChatEnabled = true;
   saveBtnEl.classList.add("active");
   updateSaveStatus();
@@ -852,7 +896,7 @@ function enterChatMode() {
   panelFooterEl.classList.remove("hidden");
   panelEl.classList.add("chat-mode");
   inputEl.placeholder = "Ask a follow-up…";
-  inputEl.value = ""; // clear the bar when entering chat mode
+  clearPromptInput(); // clear the bar when entering chat mode
 
   // Save button is ON by default when entering chat mode.
   saveChatEnabled = true;
@@ -1483,7 +1527,7 @@ async function askGroqWithSearch(prompt, myController, isCurrent, isChat, forceT
   // In chat mode, add the user bubble first.
   let assistantContainer;
   if (isChat) {
-    inputEl.value = "";
+    clearPromptInput();
     assistantContainer = appendChatTurn(prompt);
     requestAnimationFrame(() => {
       const bubble = assistantContainer.previousElementSibling;
@@ -1624,7 +1668,7 @@ async function askGroqChat(prompt, myController, isCurrent) {
 
   // 2. Build the turn UI (user bubble + empty assistant block).
   showPanel();
-  inputEl.value = "";
+  clearPromptInput();
   const assistantBlock = appendChatTurn(prompt);
 
   // Scroll so the user bubble's top is visible (not the very bottom).
